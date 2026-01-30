@@ -13,6 +13,8 @@ datasource db {
   provider = "postgresql"
 }
 
+// User schema from better auth
+
 model User {
   id            String    @id
   name          String
@@ -24,9 +26,10 @@ model User {
   sessions      Session[]
   accounts      Account[]
 
-  role String? @default("CUSTOMER")
+  role UserRole @default(CUSTOMER)
 
-  userStatus String? @default("ACTIVATE")
+  userStatus      UserStatus       @default(ACTIVATE)
+  providerProfile ProviderProfile[]
 
   @@unique([email])
   @@map("user")
@@ -78,4 +81,31 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+enum UserRole {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVATE
+  SUSPENDED
+}
+
+// Provider Model
+
+model ProviderProfile {
+  id             String   @id @default(uuid())
+  userId         String   
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  restaurantName String
+  address        String
+  description    String?
+  image          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
