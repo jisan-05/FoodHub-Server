@@ -28,7 +28,7 @@ model User {
 
   role UserRole @default(CUSTOMER)
 
-  userStatus      UserStatus       @default(ACTIVATE)
+  userStatus      UserStatus        @default(ACTIVATE)
   providerProfile ProviderProfile[]
 
   @@unique([email])
@@ -97,10 +97,10 @@ enum UserStatus {
 // Provider Model
 
 model ProviderProfile {
-  id             String   @id @default(uuid())
-  userId         String   
+  id     String @id @default(uuid())
+  userId String @unique
 
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   restaurantName String
   address        String
@@ -108,4 +108,31 @@ model ProviderProfile {
   image          String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  meals          Meal[]
+}
+
+// Category Model
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  meals       Meal[]
+}
+
+model Meal {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  image       String?
+  categoryId  String
+  category    Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  providerId  String
+  provider    ProviderProfile @relation(fields: [providerId], references: [id])
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
 }

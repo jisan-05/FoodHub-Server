@@ -3,6 +3,8 @@ import express, { Application } from "express"
 import { auth } from "./lib/auth";
 import cors from "cors"
 import { ProviderRouter } from "./middlewares/Providers/provider.routes";
+import { CategoryRouter } from "./middlewares/Category/category.routes";
+import { MealRouter } from "./middlewares/Meal/meal.router";
 
 const app:Application = express()
 
@@ -16,6 +18,10 @@ app.use(cors({
 app.all('/api/auth/*splat', toNodeHandler(auth));
 
 app.use("/api/provider",ProviderRouter)
+
+app.use("/api/categories",CategoryRouter)
+
+app.use("/api/meals",MealRouter)
 
 app.get("/",(req,res)=>{
   res.send("Hello,world")
