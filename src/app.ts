@@ -9,11 +9,11 @@ const app:Application = express()
 app.use(express.json())
 
 app.use(cors({
-  origin:process.env.APP_URL || "http://localhost:4000",
+  origin:process.env.APP_URL ,
   credentials:true
 }))
 
-app.all('/api/auth/{*any}', toNodeHandler(auth));
+app.all('/api/auth/*splat', toNodeHandler(auth));
 
 app.use("/api/provider",ProviderRouter)
 
