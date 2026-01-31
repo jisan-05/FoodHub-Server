@@ -1,3 +1,4 @@
+import { Meal } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 
 // Type for creating a new Meal
@@ -26,10 +27,34 @@ const createMeal = async (payload: CreateMealPayload, userId: string) => {
   });
 
   return result;
+};
 
-  // console.log({});
+const getAllMeals = async () => {
+  return await prisma.meal.findMany();
+};
+
+const updateMeals = async (mealsId: string, data: Partial<Meal>) => {
+  const mealsData = await prisma.meal.findUniqueOrThrow({
+    where: {
+      id: mealsId,
+    },
+    select: {
+      id: true,
+    },
+  });
+  const result = await prisma.meal.update({
+    where: {
+      id: mealsData.id,
+    },
+    data: {
+      ...data,
+    },
+  });
+  return result;
 };
 
 export const mealService = {
   createMeal,
+  getAllMeals,
+  updateMeals,
 };

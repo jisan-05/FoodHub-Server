@@ -22,6 +22,11 @@ const createProvider = async (
   }
 };
 
+const getAllProvider = async () =>{
+  return await prisma.providerProfile.findMany()
+}
+
 export const providerService = {
   createProvider,
+  getAllProvider
 };

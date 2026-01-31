@@ -15,6 +15,28 @@ const createMeal = async(req:Request,res:Response)=>{
   }
 }
 
+const getAllMeals = async(req:Request,res:Response)=>{
+  try {
+    const result = await mealService.getAllMeals()
+    res.status(200).json(result)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const updateMeals = async(req:Request,res:Response)=>{
+  try {
+    const {mealsId} = req.params
+    
+    const result = await mealService.updateMeals(mealsId as string,req.body)
+    res.status(200).json(result)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const mealController = {
-  createMeal
+  createMeal,
+  getAllMeals,
+  updateMeals
 }

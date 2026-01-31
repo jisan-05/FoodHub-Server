@@ -17,6 +17,16 @@ const createProvider = async ( req:Request,res:Response)=>{
   }
 }
 
+const getAllProvider = async(req:Request,res:Response)=>{
+  try {
+    const result = await providerService.getAllProvider()
+    res.status(200).json(result)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const ProviderController = {
-  createProvider
+  createProvider,
+  getAllProvider
 }
