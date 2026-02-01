@@ -5,6 +5,7 @@ import cors from "cors"
 import { ProviderRouter } from "./middlewares/Providers/provider.routes";
 import { CategoryRouter } from "./middlewares/Category/category.routes";
 import { MealRouter } from "./middlewares/Meal/meal.router";
+import { CustomerRouter } from "./middlewares/Customer/customer.router";
 
 const app:Application = express()
 
@@ -22,6 +23,10 @@ app.use("/api/provider/profile",ProviderRouter)
 app.use("/api/categories",CategoryRouter)
 
 app.use("/api/meals",MealRouter)
+
+// customer feature
+
+app.use("/api/customer",CustomerRouter)
 
 app.get("/",(req,res)=>{
   res.send("Hello,world")
