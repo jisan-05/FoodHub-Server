@@ -17,7 +17,7 @@ app.use(cors({
 
 app.all('/api/auth/*splat', toNodeHandler(auth));
 
-app.use("/api/provider",ProviderRouter)
+app.use("/api/provider/profile",ProviderRouter)
 
 app.use("/api/categories",CategoryRouter)
 

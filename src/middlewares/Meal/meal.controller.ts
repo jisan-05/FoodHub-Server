@@ -24,6 +24,17 @@ const getAllMeals = async(req:Request,res:Response)=>{
   }
 }
 
+const getMealById = async(req:Request,res:Response)=>{
+  try {
+    const {mealId} = req.params
+    
+    const result = await mealService.getMealById(mealId as string)
+    res.status(200).json(result)
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 const updateMeals = async(req:Request,res:Response)=>{
   try {
     const {mealsId} = req.params
@@ -38,5 +49,6 @@ const updateMeals = async(req:Request,res:Response)=>{
 export const mealController = {
   createMeal,
   getAllMeals,
-  updateMeals
+  updateMeals,
+  getMealById
 }

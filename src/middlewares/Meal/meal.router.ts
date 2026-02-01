@@ -8,6 +8,8 @@ router.post("/",auth(),mealController.createMeal)
 
 router.get("/",auth(),mealController.getAllMeals)
 
+router.get("/:mealId",auth(),mealController.getMealById)
+
 router.patch("/:mealsId",auth(),mealController.updateMeals)
 
 export const MealRouter = router 

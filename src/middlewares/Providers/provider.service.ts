@@ -22,11 +22,24 @@ const createProvider = async (
   }
 };
 
-const getAllProvider = async () =>{
-  return await prisma.providerProfile.findMany()
-}
+const getAllProvider = async () => {
+  return await prisma.providerProfile.findMany();
+};
+
+const getProviderById = async (providerId: string) => {
+  const result = await prisma.providerProfile.findUnique({
+    where: {
+      id: providerId,
+    },
+    include:{
+      meals:true
+    }
+  });
+  return result;
+};
 
 export const providerService = {
   createProvider,
-  getAllProvider
+  getAllProvider,
+  getProviderById,
 };

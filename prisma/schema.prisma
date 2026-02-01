@@ -30,6 +30,8 @@ model User {
 
   userStatus      UserStatus        @default(ACTIVATE)
   providerProfile ProviderProfile[]
+  orders          Order[]
+  reviews         Review[]
 
   @@unique([email])
   @@map("user")
@@ -109,6 +111,7 @@ model ProviderProfile {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   meals          Meal[]
+  orders         Order[]
 }
 
 // Category Model
@@ -135,4 +138,55 @@ model Meal {
   provider    ProviderProfile @relation(fields: [providerId], references: [id])
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+  orderItems  OrderItem[]
+  reviews     Review[]
+}
+
+// Order model
+
+model Order {
+  id         String          @id @default(uuid())
+  customerId String
+  customer   User            @relation(fields: [customerId], references: [id])
+  providerId String
+  provider   ProviderProfile @relation(fields: [providerId], references: [id])
+  status     OrderStatus     @default(PLACED)
+  address    String
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  orderItems OrderItem[]
+}
+
+enum OrderStatus {
+  PLACED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+model OrderItem {
+  id      String @id @default(uuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  mealId  String
+  meal    Meal   @relation(fields: [mealId], references: [id])
+
+  quantity Int
+  price    Float
+}
+
+model Review {
+  id      String  @id @default(uuid())
+  rating  Int
+  comment String?
+  mealId  String
+  meal    Meal    @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([mealId, userId]) // one review per meal per user
 }

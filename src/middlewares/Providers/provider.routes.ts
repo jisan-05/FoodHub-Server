@@ -4,9 +4,11 @@ import auth, { UserRole } from '../auth';
 
 const router = express.Router()
 
-router.post("/profile",auth(),ProviderController.createProvider)
+router.post("/",auth(),ProviderController.createProvider)
 
-router.get("/profile",auth(),ProviderController.getAllProvider)
+router.get("/",auth(),ProviderController.getAllProvider)
+
+router.get("/:providerId",auth(),ProviderController.getProviderById)
 
 
 export const ProviderRouter:Router = router

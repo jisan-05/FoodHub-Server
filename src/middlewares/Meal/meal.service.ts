@@ -33,6 +33,14 @@ const getAllMeals = async () => {
   return await prisma.meal.findMany();
 };
 
+const getMealById = async(mealId:string)=>{
+  return await prisma.meal.findUnique({
+    where:{
+      id:mealId
+    }
+  })
+}
+
 const updateMeals = async (mealsId: string, data: Partial<Meal>) => {
   const mealsData = await prisma.meal.findUniqueOrThrow({
     where: {
@@ -53,8 +61,10 @@ const updateMeals = async (mealsId: string, data: Partial<Meal>) => {
   return result;
 };
 
+
 export const mealService = {
   createMeal,
   getAllMeals,
   updateMeals,
+  getMealById
 };
