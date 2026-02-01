@@ -15,6 +15,11 @@ const createCategory = async(payload:CreateCategoryPayload)=>{
   return result;
 }
 
+const getAllCategories = async() =>{
+  return await prisma.category.findMany()
+}
+
 export const categoryService = {
-  createCategory
+  createCategory,
+  getAllCategories
 }
