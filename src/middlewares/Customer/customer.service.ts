@@ -68,8 +68,76 @@ const placeOrder = async (
 
   return updatedOrder;
 };
-const leaveReview = async () => {};
-const getMyOrders = async () => {};
+const getMyOrders = async (customerId: string) => {
+  
+  const result = await prisma.order.findMany({
+    where: {
+      customerId: customerId,
+    },
+    include: {
+      provider: {
+        select: {
+          restaurantName: true,
+          image: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return result
+};
+
+const getSingleOrder = async(orderId:string,customerId:string)=>{
+  const order = await prisma.order.findFirst({
+  where: {
+    id: orderId,
+    customerId: customerId
+  },
+  include: {
+    orderItems: {
+      include: {
+        meal: true
+      }
+    },
+    provider: true
+  }
+})
+return order
+}
+
+const leaveReview = async (payload:any,userId:string) => {
+  const order = await prisma.order.findFirst({
+  where: {
+    id: payload.orderId
+  },
+  include: {
+    orderItems: true
+  }
+})
+console.log(order);
+if (order?.status !== "DELIVERED") {
+  throw new Error("You can review only after delivery")
+}
+
+const orderedMealIds = order.orderItems.map(i => i.mealId)
+
+if (!orderedMealIds.includes(payload.mealId)) {
+  throw new Error("You did not order this meal")
+}
+
+const result = await prisma.review.create({
+  data: {
+    mealId:payload.mealId,
+    userId: userId,
+    rating:payload.rating,
+    comment:payload.comment
+  }
+})
+return result
+
+};
 const updateProfile = async () => {};
 
 export const CustomerService = {
@@ -78,4 +146,5 @@ export const CustomerService = {
   leaveReview,
   getMyOrders,
   updateProfile,
+  getSingleOrder
 };
