@@ -6,4 +6,6 @@ const router = Router()
 
 router.get("/",auth(),ordersController.getProviderOrders)
 
+router.patch("/:id",auth(),ordersController.updateOrderStatus)
+
 export const ordersRouter = router
