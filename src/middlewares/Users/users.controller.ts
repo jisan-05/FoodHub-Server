@@ -31,8 +31,25 @@ const updateMyProfile = async (req: Request, res: Response) => {
     });
   }
 };
+const updateUserStatus = async (req: Request, res: Response) => {
+  try {
+    
+    const { userId,status } = req.body;
+    const result = await profileService.updateUserStatus(
+      userId as string,
+      status
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "update profile failed!",
+      details: error,
+    });
+  }
+};
 
 export const profileController = {
   getMyProfile,
   updateMyProfile,
+  updateUserStatus
 };

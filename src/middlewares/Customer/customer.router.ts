@@ -1,5 +1,5 @@
 import express, { Router } from 'express';
-import auth from '../auth';
+import auth, { UserRole } from '../auth';
 import { customerController } from './customer.controller';
 const router = express.Router()
 

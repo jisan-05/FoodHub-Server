@@ -108,6 +108,7 @@ return order
 }
 
 const leaveReview = async (payload:any,userId:string) => {
+  console.log(payload)
   const order = await prisma.order.findFirst({
   where: {
     id: payload.orderId
@@ -116,7 +117,7 @@ const leaveReview = async (payload:any,userId:string) => {
     orderItems: true
   }
 })
-console.log(order);
+// console.log(order);
 if (order?.status !== "DELIVERED") {
   throw new Error("You can review only after delivery")
 }
