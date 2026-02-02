@@ -8,6 +8,7 @@ import { MealRouter } from "./middlewares/Meal/meal.router";
 import { CustomerRouter } from "./middlewares/Customer/customer.router";
 import { profileRouter } from "./middlewares/Users/users.routes";
 import { ordersRouter } from "./middlewares/Orders/orders.router";
+import { AdminRouter } from "./middlewares/Admin/admin.routes";
 
 const app: Application = express();
 
@@ -37,6 +38,9 @@ app.use("/api/customer", CustomerRouter);
 app.use("/api/users", profileRouter);
 
 app.use("/api/provider/orders", ordersRouter);
+
+// admin
+app.use("/api/admin/orders",AdminRouter)
 
 app.get("/", (req, res) => {
   res.send("Hello,world");
