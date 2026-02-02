@@ -26,7 +26,35 @@ const getAllCategories= async(req:Request,res:Response)=>{
   }
 }
 
+const updateCategory = async(req:Request,res:Response)=>{
+  try {
+    const {categoryId} = req.params
+    const result = await categoryService.updateCategory(categoryId as string,req.body)
+    res.status(201).json(result)
+  } catch (error) {
+   res.status(400).json({
+      error: "create category failed!",
+      details: error,
+    });
+  }
+}
+
+const deleteCategory = async(req:Request,res:Response)=>{
+  try {
+    const {categoryId} = req.params
+    const result = await categoryService.deleteCategory(categoryId as string)
+    res.status(201).json(result)
+  } catch (error) {
+   res.status(400).json({
+      error: "create category failed!",
+      details: error,
+    });
+  }
+}
+
 export const categoryController = {
   createCategory,
-  getAllCategories
+  getAllCategories,
+  updateCategory,
+  deleteCategory
 }

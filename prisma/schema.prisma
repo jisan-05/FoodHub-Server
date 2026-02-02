@@ -170,7 +170,7 @@ model OrderItem {
   orderId String
   order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   mealId  String
-  meal    Meal   @relation(fields: [mealId], references: [id])
+  meal    Meal   @relation(fields: [mealId], references: [id],onDelete: Cascade)
 
   quantity Int
   price    Float

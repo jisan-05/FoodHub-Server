@@ -7,4 +7,8 @@ router.post("/",auth(),categoryController.createCategory)
 
 router.get("/",auth(),categoryController.getAllCategories)
 
+router.patch("/:categoryId",auth(),categoryController.updateCategory)
+
+router.delete("/:categoryId",auth(),categoryController.deleteCategory)
+
 export const CategoryRouter = router
