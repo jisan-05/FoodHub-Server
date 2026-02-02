@@ -6,7 +6,10 @@ const createCategory = async(req:Request,res:Response)=>{
     const result = await categoryService.createCategory(req.body)
     res.status(201).json(result)
   } catch (error) {
-    console.log(error);
+   res.status(400).json({
+      error: "create category failed!",
+      details: error,
+    });
   }
 }
 
@@ -16,7 +19,10 @@ const getAllCategories= async(req:Request,res:Response)=>{
     const result = await categoryService.getAllCategories()
     res.status(200).json(result)
   } catch (error) {
-    console.log(error);
+    res.status(400).json({
+      error: "get all category failed!",
+      details: error,
+    });
   }
 }
 

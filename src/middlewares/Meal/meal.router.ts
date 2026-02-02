@@ -10,6 +10,8 @@ router.get("/",auth(),mealController.getAllMeals)
 
 router.get("/:mealId",auth(),mealController.getMealById)
 
-router.patch("/:mealsId",auth(),mealController.updateMeals)
+router.patch("/:mealId",auth(),mealController.updateMeals)
+
+router.delete("/:mealId",auth(),mealController.deleteMeal)
 
 export const MealRouter = router 

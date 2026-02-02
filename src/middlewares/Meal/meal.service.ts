@@ -89,9 +89,20 @@ const updateMeals = async (mealsId: string, data: Partial<Meal>) => {
   return result;
 };
 
+const deleteMeal = async (mealsId: string) => {
+  const result = await prisma.meal.delete({
+    where: {
+      id: mealsId,
+    },
+  });
+
+  return result;
+};
+
 export const mealService = {
   createMeal,
   getAllMeals,
   updateMeals,
   getMealById,
+  deleteMeal,
 };
