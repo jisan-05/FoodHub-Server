@@ -1,14 +1,14 @@
-import express, { Router } from 'express';
-import { categoryController } from './category.controller';
-import auth from '../auth';
-const router = express.Router()
+import express from "express";
+import auth from "../auth";
+import { categoryController } from "./category.controller";
+const router = express.Router();
 
-router.post("/",auth(),categoryController.createCategory)
+router.post("/", auth(), categoryController.createCategory);
 
-router.get("/",auth(),categoryController.getAllCategories)
+router.get("/", categoryController.getAllCategories);
 
-router.patch("/:categoryId",auth(),categoryController.updateCategory)
+router.patch("/:categoryId", auth(), categoryController.updateCategory);
 
-router.delete("/:categoryId",auth(),categoryController.deleteCategory)
+router.delete("/:categoryId", auth(), categoryController.deleteCategory);
 
-export const CategoryRouter = router
+export const CategoryRouter = router;

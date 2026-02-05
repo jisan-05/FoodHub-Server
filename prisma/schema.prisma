@@ -100,7 +100,7 @@ enum UserStatus {
 
 model ProviderProfile {
   id     String @id @default(uuid())
-  userId String @unique
+  userId String 
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 

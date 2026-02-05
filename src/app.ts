@@ -1,14 +1,14 @@
 import { toNodeHandler } from "better-auth/node";
+import cors from "cors";
 import express, { Application } from "express";
 import { auth } from "./lib/auth";
-import cors from "cors";
-import { ProviderRouter } from "./middlewares/Providers/provider.routes";
-import { CategoryRouter } from "./middlewares/Category/category.routes";
-import { MealRouter } from "./middlewares/Meal/meal.router";
-import { CustomerRouter } from "./middlewares/Customer/customer.router";
-import { profileRouter } from "./middlewares/Users/users.routes";
-import { ordersRouter } from "./middlewares/Orders/orders.router";
 import { AdminRouter } from "./middlewares/Admin/admin.routes";
+import { CategoryRouter } from "./middlewares/Category/category.routes";
+import { CustomerRouter } from "./middlewares/Customer/customer.router";
+import { MealRouter } from "./middlewares/Meal/meal.router";
+import { ordersRouter } from "./middlewares/Orders/orders.router";
+import { ProviderRouter } from "./middlewares/Providers/provider.routes";
+import { profileRouter } from "./middlewares/Users/users.routes";
 
 const app: Application = express();
 
@@ -16,7 +16,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: process.env.APP_URL,
+    origin: [process.env.APP_URL as string, process.env.APP_URL2 as string],
     credentials: true,
   }),
 );
@@ -40,7 +40,7 @@ app.use("/api/users", profileRouter);
 app.use("/api/provider/orders", ordersRouter);
 
 // admin
-app.use("/api/admin/orders",AdminRouter)
+app.use("/api/admin/orders", AdminRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello,world");

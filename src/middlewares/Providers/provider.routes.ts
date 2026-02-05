@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post("/",auth(),ProviderController.createProvider)
 
-router.get("/",auth(),ProviderController.getAllProvider)
+router.get("/",ProviderController.getAllProvider)
 
 router.get("/:providerId",auth(),ProviderController.getProviderById)
 

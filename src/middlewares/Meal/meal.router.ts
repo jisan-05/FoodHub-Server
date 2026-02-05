@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post("/",auth(),mealController.createMeal)
 
-router.get("/",auth(),mealController.getAllMeals)
+router.get("/",mealController.getAllMeals)
 
 router.get("/:mealId",auth(),mealController.getMealById)
 
