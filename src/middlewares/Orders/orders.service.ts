@@ -2,7 +2,7 @@ import { OrderStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 const getProviderOrders = async (providerId: string) => {
-  const provider: any = await prisma.providerProfile.findUnique({
+  const provider: any = await prisma.providerProfile.findFirst({
     where: {
       userId: providerId,
     },
@@ -25,7 +25,7 @@ const getProviderOrders = async (providerId: string) => {
 
 const updateOrderStatus = async(status:OrderStatus,userId:string,orderId:string)=>{
    // 1️⃣ Find provider
-  const provider = await prisma.providerProfile.findUnique({
+  const provider = await prisma.providerProfile.findFirst({
     where: { userId: userId}
   })
 

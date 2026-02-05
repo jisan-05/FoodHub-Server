@@ -1,5 +1,4 @@
 import { Meal } from "../../../generated/prisma/client";
-import { MealWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
 // Type for creating a new Meal
@@ -12,7 +11,7 @@ type CreateMealPayload = {
 };
 
 const createMeal = async (payload: CreateMealPayload, userId: string) => {
-  const providerProfile = await prisma.providerProfile.findUnique({
+  const providerProfile = await prisma.providerProfile.findFirst({
     where: { userId: userId },
   });
   if (!providerProfile) {
