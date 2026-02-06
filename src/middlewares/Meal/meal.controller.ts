@@ -41,6 +41,20 @@ const getAllMeals = async (req: Request, res: Response) => {
   }
 };
 
+const getMealsByProvider = async (req: Request, res: Response) => {
+  try {
+    const {providerId} = req.params
+    // console.log(providerId)
+    const result = await mealService.getMealsByProvider(providerId as string)
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "Get Meals failed!",
+      details: error,
+    });
+  }
+};
+
 const getMealById = async (req: Request, res: Response) => {
   try {
     const { mealId } = req.params;
@@ -85,6 +99,7 @@ const deleteMeal = async (req: Request, res: Response) => {
 export const mealController = {
   createMeal,
   getAllMeals,
+  getMealsByProvider,
   updateMeals,
   getMealById,
   deleteMeal,
