@@ -52,6 +52,23 @@ const getMyOrders = async (req: Request, res: Response) => {
     });
   }
 };
+const getMyOrdersCard = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(400).json({
+        error: "Unauthorized!",
+      });
+    }
+    const customerId = req.user?.id;
+    const result = await CustomerService.getMyOrdersCard(customerId);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(400).json({
+      error: "get my orders failed!",
+      details: error,
+    });
+  }
+};
 
 const getSingleOrder = async (req: Request, res: Response) => {
   try {
@@ -110,5 +127,6 @@ export const customerController = {
   getMyOrders,
   getSingleOrder,
   leaveReview,
-  getReviews
+  getReviews,
+  getMyOrdersCard
 };

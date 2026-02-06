@@ -11,6 +11,8 @@ router.get("/orders/status/:id", auth(), customerController.placeOrder);
 
 router.get("/orders", auth(), customerController.getMyOrders);
 
+router.get("/orders-cart", auth(), customerController.getMyOrdersCard);
+
 router.get("/orders/:orderId", auth(), customerController.getSingleOrder);
 
 router.post("/reviews", auth(), customerController.leaveReview);

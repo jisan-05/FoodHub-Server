@@ -2,92 +2,75 @@ import { prisma } from "../../lib/prisma";
 
 // customer.service.ts
 const addToCart = async (payload: any, userId: string) => {
-  // find the meal
-  const meal = await prisma.meal.findUniqueOrThrow({
-    where: {
-      id: payload.mealId,
-    },
-  });
+  const meal = await prisma.meal.findUniqueOrThrow({ where: { id: payload.mealId } });
 
-  // Find if user already has a cart (Order with status PLACED)
+  // Find or create cart order
   let order = await prisma.order.findFirst({
-    where: {
-      customerId: userId,
-      status: "PLACED",
-      providerId: meal.providerId,
-    },
+    where: { customerId: userId, status: "PLACED", providerId: meal.providerId },
   });
 
-  // If no cart exists, create one
   if (!order) {
     order = await prisma.order.create({
-      data: {
-        customerId: userId,
-        providerId: meal.providerId,
-        status: "PLACED",
-        address: "", // fill on checkout
-      },
+      data: { customerId: userId, providerId: meal.providerId, status: "PLACED", address: "" },
     });
   }
 
-  //  Add meal to OrderItem
-  const orderItem = await prisma.orderItem.create({
-    data: {
-      orderId: order.id,
-      mealId: meal.id,
-      quantity: payload.quantity,
-      price: meal.price * payload.quantity,
-    },
+  // Check if meal already in cart
+  const existingCartItem = await prisma.orderItemForCart.findFirst({
+    where: { orderId: order.id, mealId: meal.id },
   });
 
-  return { order, orderItem };
+  if (existingCartItem) {
+    // Update quantity
+    await prisma.orderItemForCart.update({
+      where: { id: existingCartItem.id },
+      data: { quantity: existingCartItem.quantity + payload.quantity, price: meal.price * (existingCartItem.quantity + payload.quantity) }
+    });
+  } else {
+    // Add new cart item
+    await prisma.orderItemForCart.create({
+      data: { orderId: order.id, mealId: meal.id, quantity: payload.quantity, price: meal.price * payload.quantity },
+    });
+  }
+
+  return { message: "Added to cart ✅" };
 };
+
 // customer.service.ts
-const placeOrder = async (
-  data: { address: string },
-  userId: string
-) => {
-  const orders = await prisma.order.findMany({
-    where: {
-      customerId: userId,
-      status: "PLACED",
-    },
-    include: {
-      orderItems: true,
-    },
+const placeOrder = async (data: { address: string }, userId: string) => {
+  const carts = await prisma.order.findMany({
+    where: { customerId: userId, status: "PLACED" },
+    include: { orderItemForCarts: true }
   });
 
-  if (orders.length === 0) {
-    throw new Error("No cart found");
-  }
+  if (!carts.length) throw new Error("No cart found");
 
-  for (const order of orders) {
-    if (order.orderItems.length === 0) continue;
+  for (const cart of carts) {
+    if (!cart.orderItemForCarts.length) continue;
 
-    // 1️⃣ Update order with address & mark as checked out
+    // 1️⃣ Move cart items to orderItems
+    const orderItemsData = cart.orderItemForCarts.map(item => ({
+      orderId: cart.id,
+      mealId: item.mealId,
+      quantity: item.quantity,
+      price: item.price,
+    }));
+
+    await prisma.orderItem.createMany({ data: orderItemsData });
+
+    // 2️⃣ Update order with address and mark as checked out
     await prisma.order.update({
-      where: { id: order.id },
-      data: {
-        address: data.address,
-        status: "PLACED", // or "CHECKED_OUT" if you want separate status
-      },
+      where: { id: cart.id },
+      data: { address: data.address, status: "PLACED" },
     });
 
-    // 2️⃣ Delete all orderItems (empty the cart)
-    await prisma.orderItem.deleteMany({
-      where: {
-        orderId: order.id,
-      },
-    });
-
-    // 3️⃣ Optionally delete the order itself (cart cleared)
-    await prisma.order.delete({
-      where: { id: order.id },
-    });
+    // 3️⃣ Clear the cart items
+    await prisma.orderItemForCart.deleteMany({ where: { orderId: cart.id } });
   }
 
-  return { message: "Checkout completed and cart cleared ✅" };
+  return { message: "Checkout completed ✅" };
 };
+
 
 
 const getMyOrders = async (customerId: string) => {
@@ -109,6 +92,33 @@ const getMyOrders = async (customerId: string) => {
 
   return result;
 };
+const getMyOrdersCard = async (customerId: string) => {
+  const result = await prisma.order.findMany({
+    where: {
+      customerId: customerId,
+    },
+    include: {
+      // Include regular order items
+      orderItems: {
+        include: {
+          meal: true,
+        },
+      },
+      // Include cart order items
+      orderItemForCarts: {
+        include: {
+          meal: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return result;
+};
+
 
 const getSingleOrder = async (orderId: string, customerId: string) => {
   const order = await prisma.order.findFirst({
@@ -174,4 +184,5 @@ export const CustomerService = {
   getMyOrders,
   updateProfile,
   getSingleOrder,
+  getMyOrdersCard
 };

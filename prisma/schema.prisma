@@ -100,7 +100,7 @@ enum UserStatus {
 
 model ProviderProfile {
   id     String @id @default(uuid())
-  userId String 
+  userId String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -127,34 +127,36 @@ model Category {
 }
 
 model Meal {
-  id          String          @id @default(uuid())
-  name        String
-  description String?
-  price       Float
-  image       String?
-  categoryId  String
-  category    Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  providerId  String
-  provider    ProviderProfile @relation(fields: [providerId], references: [id])
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  orderItems  OrderItem[]
-  reviews     Review[]
+  id                String             @id @default(uuid())
+  name              String
+  description       String?
+  price             Float
+  image             String?
+  categoryId        String
+  category          Category           @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  providerId        String
+  provider          ProviderProfile    @relation(fields: [providerId], references: [id])
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  orderItems        OrderItem[]
+  reviews           Review[]
+  orderItemForCarts OrderItemForCart[]
 }
 
 // Order model
 
 model Order {
-  id         String          @id @default(uuid())
-  customerId String
-  customer   User            @relation(fields: [customerId], references: [id])
-  providerId String
-  provider   ProviderProfile @relation(fields: [providerId], references: [id])
-  status     OrderStatus     @default(PLACED)
-  address    String
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
-  orderItems OrderItem[]
+  id                String             @id @default(uuid())
+  customerId        String
+  customer          User               @relation(fields: [customerId], references: [id])
+  providerId        String
+  provider          ProviderProfile    @relation(fields: [providerId], references: [id])
+  status            OrderStatus        @default(PLACED)
+  address           String
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  orderItems        OrderItem[]
+  orderItemForCarts OrderItemForCart[]
 }
 
 enum OrderStatus {
@@ -170,7 +172,18 @@ model OrderItem {
   orderId String
   order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
   mealId  String
-  meal    Meal   @relation(fields: [mealId], references: [id],onDelete: Cascade)
+  meal    Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  quantity Int
+  price    Float
+}
+
+model OrderItemForCart {
+  id      String @id @default(uuid())
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  mealId  String
+  meal    Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
 
   quantity Int
   price    Float
