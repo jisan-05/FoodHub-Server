@@ -8,9 +8,9 @@ router.post("/",auth(),mealController.createMeal)
 
 router.get("/",mealController.getAllMeals)
 
-router.get("/:providerId",mealController.getMealsByProvider)
+router.get("/provider/:providerId",mealController.getMealsByProvider)
 
-router.get("/:mealId",auth(),mealController.getMealById)
+router.get("/:mealId",mealController.getMealById)
 
 router.patch("/:mealId",auth(),mealController.updateMeals)
 

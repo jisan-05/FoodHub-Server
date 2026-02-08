@@ -14,6 +14,18 @@ const getMyProfile = async (req: Request, res: Response) => {
   }
 };
 
+const getAllUser = async(req:Request,res:Response)=>{
+  try {
+    const result = await profileService.getAllUser()
+     res.status(200).json(result);
+  } catch (error) {
+     res.status(400).json({
+      error: "get all user profile failed!",
+      details: error,
+    });
+  }
+}
+
 const updateMyProfile = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id;
@@ -51,5 +63,6 @@ const updateUserStatus = async (req: Request, res: Response) => {
 export const profileController = {
   getMyProfile,
   updateMyProfile,
-  updateUserStatus
+  updateUserStatus,
+  getAllUser
 };

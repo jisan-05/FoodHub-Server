@@ -18,7 +18,7 @@ const createProvider = async (
     });
     return result;
   } catch (error) {
-    console.log(error);
+
   }
 };
 

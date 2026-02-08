@@ -159,13 +159,13 @@ model Order {
   orderItemForCarts OrderItemForCart[]
 }
 
-enum OrderStatus {
-  PLACED
-  PREPARING
-  READY
-  DELIVERED
-  CANCELLED
-}
+  enum OrderStatus {
+    PLACED
+    PREPARING
+    READY
+    DELIVERED
+    CANCELLED
+  }
 
 model OrderItem {
   id      String @id @default(uuid())

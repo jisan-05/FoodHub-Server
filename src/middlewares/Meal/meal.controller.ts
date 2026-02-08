@@ -20,7 +20,7 @@ const createMeal = async (req: Request, res: Response) => {
 const getAllMeals = async (req: Request, res: Response) => {
   try {
     const { categoryId, minPrice, maxPrice, mealName } = req.query;
-    console.log(categoryId, minPrice, maxPrice, mealName);
+
     const minPriceNumber =
       req.query.minPrice !== undefined ? Number(req.query.minPrice) : undefined;
 
@@ -44,7 +44,7 @@ const getAllMeals = async (req: Request, res: Response) => {
 const getMealsByProvider = async (req: Request, res: Response) => {
   try {
     const {providerId} = req.params
-    // console.log(providerId)
+
     const result = await mealService.getMealsByProvider(providerId as string)
     res.status(200).json(result);
   } catch (error) {

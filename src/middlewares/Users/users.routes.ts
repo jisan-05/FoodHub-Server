@@ -6,6 +6,8 @@ const router = Router()
 
 router.get("/me",auth(),profileController.getMyProfile)
 
+router.get("/",auth(),profileController.getAllUser)
+
 router.patch("/me",auth(),profileController.updateMyProfile)
 
 router.patch("/",auth(),profileController.updateUserStatus)

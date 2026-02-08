@@ -39,7 +39,7 @@ const addToCart = async (payload: any, userId: string) => {
 // customer.service.ts
 const placeOrder = async (data: { address: string }, userId: string) => {
   const carts = await prisma.order.findMany({
-    where: { customerId: userId, status: "PLACED" },
+    where: { customerId: userId },
     include: { orderItemForCarts: true }
   });
 
@@ -139,7 +139,7 @@ const getSingleOrder = async (orderId: string, customerId: string) => {
 };
 
 const leaveReview = async (payload: any, userId: string) => {
-  console.log(payload);
+
   const order = await prisma.order.findFirst({
     where: {
       id: payload.orderId,
@@ -148,7 +148,7 @@ const leaveReview = async (payload: any, userId: string) => {
       orderItems: true,
     },
   });
-  // console.log(order);
+
   if (order?.status !== "DELIVERED") {
     throw new Error("You can review only after delivery");
   }

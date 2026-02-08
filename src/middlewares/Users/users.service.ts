@@ -9,6 +9,12 @@ const getMyProfile = async (userId: string) => {
   });
   return result;
 };
+
+const getAllUser = async()=>{
+  const result = await prisma.user.findMany()
+  return result
+}
+
 const updateMyProfile = async (userId: string, name: string, image: string) => {
   const result = await prisma.user.update({
     where: { id: userId },
@@ -33,5 +39,6 @@ const updateUserStatus = async (userId: string, status:UserStatus) => {
 export const profileService = {
   getMyProfile,
   updateMyProfile,
+  getAllUser,
   updateUserStatus
 };
