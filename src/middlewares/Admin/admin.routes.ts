@@ -1,8 +1,8 @@
 import express, { Router } from 'express';
-import auth from '../auth';
+import auth, { UserRole } from '../auth';
 import { adminController } from './admin.controller';
 const router = express.Router()
 
-router.get("/",auth(),adminController.getAllOrders)
+router.get("/",auth(UserRole.ADMIN),adminController.getAllOrders)
 
 export const AdminRouter = router

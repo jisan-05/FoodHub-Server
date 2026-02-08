@@ -1,5 +1,5 @@
 import express from "express";
-import auth from "../auth";
+import auth, { UserRole } from "../auth";
 import { customerController } from "./customer.controller";
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.get("/orders-cart", auth(), customerController.getMyOrdersCard);
 
 router.get("/orders/:orderId", auth(), customerController.getSingleOrder);
 
-router.post("/reviews", auth(), customerController.leaveReview);
+router.post("/reviews", auth(UserRole.USER), customerController.leaveReview);
 
 router.get("/reviews", customerController.getReviews);
 

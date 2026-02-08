@@ -6,10 +6,10 @@ const router = Router()
 
 router.get("/me",auth(),profileController.getMyProfile)
 
-router.get("/",auth(),profileController.getAllUser)
+router.get("/",auth(UserRole.ADMIN),profileController.getAllUser)
 
 router.patch("/me",auth(),profileController.updateMyProfile)
 
-router.patch("/",auth(),profileController.updateUserStatus)
+router.patch("/",auth(UserRole.ADMIN),profileController.updateUserStatus)
 
 export const profileRouter = router

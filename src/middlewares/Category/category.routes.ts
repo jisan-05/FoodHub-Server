@@ -1,14 +1,14 @@
 import express from "express";
-import auth from "../auth";
+import auth, { UserRole } from "../auth";
 import { categoryController } from "./category.controller";
 const router = express.Router();
 
-router.post("/", auth(), categoryController.createCategory);
+router.post("/", auth(UserRole.ADMIN), categoryController.createCategory);
 
 router.get("/", categoryController.getAllCategories);
 
-router.patch("/:categoryId", auth(), categoryController.updateCategory);
+router.patch("/:categoryId", auth(UserRole.ADMIN), categoryController.updateCategory);
 
-router.delete("/:categoryId", auth(), categoryController.deleteCategory);
+router.delete("/:categoryId", auth(UserRole.ADMIN), categoryController.deleteCategory);
 
 export const CategoryRouter = router;
