@@ -3,7 +3,7 @@ import auth, { UserRole } from "../auth";
 import { categoryController } from "./category.controller";
 const router = express.Router();
 
-router.post("/", auth(UserRole.ADMIN), categoryController.createCategory);
+router.post("/", auth(), categoryController.createCategory);
 
 router.get("/", categoryController.getAllCategories);
 

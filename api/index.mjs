@@ -373,7 +373,7 @@ var init_category_routes = __esm({
     init_auth2();
     init_category_controller();
     router2 = express2.Router();
-    router2.post("/", auth_default("ADMIN" /* ADMIN */), categoryController.createCategory);
+    router2.post("/", auth_default(), categoryController.createCategory);
     router2.get("/", categoryController.getAllCategories);
     router2.patch("/:categoryId", auth_default("ADMIN" /* ADMIN */), categoryController.updateCategory);
     router2.delete("/:categoryId", auth_default("ADMIN" /* ADMIN */), categoryController.deleteCategory);
@@ -682,7 +682,7 @@ var init_customer_router = __esm({
     router3.post("/orders/checkout", auth_default(), customerController.placeOrder);
     router3.get("/orders/status/:id", auth_default(), customerController.placeOrder);
     router3.get("/orders", auth_default(), customerController.getMyOrders);
-    router3.get("/orders-cart", customerController.getMyOrdersCard);
+    router3.get("/orders-cart", auth_default(), customerController.getMyOrdersCard);
     router3.get("/orders/:orderId", auth_default(), customerController.getSingleOrder);
     router3.post("/reviews", auth_default("CUSTOMER" /* USER */), customerController.leaveReview);
     router3.get("/reviews", customerController.getReviews);
