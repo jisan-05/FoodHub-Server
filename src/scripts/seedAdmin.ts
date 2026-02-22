@@ -5,10 +5,10 @@ import fetch from "node-fetch";
 async function seedAdmin() {
   try {
     const adminData = {
-      name: "admin shaheb",
-      email: "admin1122asas2s2a@gmail.com",
+      name: "Mr. Admin",
+      email: "admin@gmail.com",
       role: UserRole.ADMIN,
-      password: "admin1234"
+      password: "12345678"
     };
     // check user exist on db or not
     const existingUser = await prisma.user.findUnique({
