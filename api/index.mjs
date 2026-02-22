@@ -115,13 +115,15 @@ var init_auth = __esm({
       database: prismaAdapter(prisma, {
         provider: "postgresql"
       }),
-      trustedOrigins: [process.env.APP_URL],
+      trustedOrigins: [process.env.APP_URL, process.env.APP_URL2],
       // ✅ SESSION CONFIG (from docs)
       session: {
         cookieCache: {
           enabled: true,
-          maxAge: 5 * 60
+          maxAge: 5 * 60,
           // 5 minutes
+          sameSite: "none"
+          // ✅ must be none for cross-site requests
         }
       },
       // ✅ ADVANCED CONFIG (from docs)
@@ -1251,7 +1253,7 @@ var init_users_routes = __esm({
 import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
 import express6 from "express";
-var app, allowedOrigins, app_default;
+var app, app_default;
 var init_app = __esm({
   "src/app.ts"() {
     "use strict";
@@ -1265,26 +1267,10 @@ var init_app = __esm({
     init_users_routes();
     app = express6();
     app.use(express6.json());
-    allowedOrigins = [
-      process.env.APP_URL || "http://localhost:3000",
-      process.env.APP_URL2
-      // Production frontend URL
-    ].filter(Boolean);
     app.use(
       cors({
-        origin: (origin, callback) => {
-          if (!origin) return callback(null, true);
-          const isAllowed = allowedOrigins.includes(origin) || /^https:\/\/next-blog-client.*\.vercel\.app$/.test(origin) || /^https:\/\/.*\.vercel\.app$/.test(origin);
-          if (isAllowed) {
-            callback(null, true);
-          } else {
-            callback(new Error(`Origin ${origin} not allowed by CORS`));
-          }
-        },
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-        allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-        exposedHeaders: ["Set-Cookie"]
+        origin: [process.env.APP_URL, process.env.APP_URL2],
+        credentials: true
       })
     );
     app.all("/api/auth/*splat", toNodeHandler(auth));
